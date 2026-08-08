@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>For Contributors — OpenYC Skills</title>
+  <meta name="description" content="How to contribute skills to OpenYC Skills: BYOK setup, exact CLI commands, the per-batch workflow, the cold-start warning, quota management, validation, and troubleshooting.">
+  <link rel="canonical" href="https://hanushashwat.github.io/OpenYC-Website/contributors.html">
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="scripts/motion.js" defer></script>
+  <script src="scripts/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3.5 5.5 7 2 10.5"></path>
+            <path d="M7.5 10.5H12"></path>
+          </svg>
+        </span>
+        OpenYC Skills
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>
+        <span class="sr-only">Toggle menu</span>
+        <svg class="icon-menu" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 5.5h14M3 10h14M3 14.5h14"></path>
+        </svg>
+        <svg class="icon-close" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M5 5l10 10M15 5 5 15"></path>
+        </svg>
+      </button>
+      <nav id="site-nav" aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="agents.html">For AI Agents</a></li>
+          <li><a href="contributors.html" aria-current="page">For Contributors</a></li>
+          <li><a href="taxonomy.html">Taxonomy</a></li>
+          <li><a href="cli.html">CLI Reference</a></li>
+          <li><a href="about.html">FAQ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="container">
+        <h1 class="page-title">OpenYC Skills for Contributors</h1>
+        <p class="page-lead">Fork the repo, bring your own API keys, run a few commands, and open a pull request. Your generated skills are validated automatically before anything ships.</p>
+      </div>
+    </section>
+
+    <!-- SOURCE: docs/BYOK.md "How the BYOK Model Works"; AGENTS.md §6.10 -->
+    <section class="section section--tight" aria-labelledby="byok">
+      <div class="container">
+        <h2 id="byok">What BYOK means</h2>
+        <p>BYOK stands for <strong>Bring Your Own Keys</strong>. The pipeline uses large language models to extract advice from YC content and synthesize skill files, and those LLM calls cost money or consume API quota. Instead of the project paying for everyone's usage, each contributor supplies their own API keys and uses their own quota.</p>
+        <p>The project supports <strong>4 LLM providers</strong>: DeepSeek, Kimi (Moonshot), GLM (BigModel), and Gemini. You only need <strong>at least one</strong> &mdash; the system uses whichever you have available.</p>
+        <div class="callout callout--info">
+          <span class="callout-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="10" cy="10" r="7.5"></circle>
+              <path d="M10 6.5v4l2.5 1.5"></path>
+            </svg>
+          </span>
+          <div>
+            <p class="callout-title">Cost note</p>
+            <p>A typical batch of 15 content items costs roughly <strong>$0.01&ndash;$0.10</strong> in API usage, depending on the provider.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE: docs/BYOK.md "Prerequisites" -->
+    <section class="section section--tight" aria-labelledby="prerequisites">
+      <div class="container">
+        <h2 id="prerequisites">Prerequisites</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Requirement</th>
+                <th scope="col">Version</th>
+                <th scope="col">Why it's needed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Python</td>
+                <td>3.11 or 3.12 (3.11 recommended)</td>
+                <td>All project code is Python</td>
+              </tr>
+              <tr>
+                <td>Git</td>
+                <td>Any recent version</td>
+                <td>Version control and cloning the repo</td>
+              </tr>
+              <tr>
+                <td>pip</td>
+                <td>24.x+</td>
+                <td>Python package manager (will be upgraded)</td>
+              </tr>
+              <tr>
+                <td>LLM API key</td>
+                <td>At least one</td>
+                <td>From DeepSeek, Kimi (Moonshot), GLM (BigModel), or Gemini</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.10 (setup steps, exact commands) -->
+    <section class="section section--tight" aria-labelledby="setup">
+      <div class="container">
+        <h2 id="setup">One-time setup</h2>
+        <pre class="code" data-label="bash — setup"><code># 1. Fork &amp; clone
+git clone https://github.com/YOUR_USERNAME/openyc-skills.git
+cd openyc-skills
+
+# 2. Create &amp; activate a virtual environment (Python 3.11)
+python3.11 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\Activate.ps1
+
+# 3. Install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# 4. Download the local embedding model (~90 MB, CPU-only)
+python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
+
+# 5. Initialize the database
+python -m src.cli init-db
+
+# 6. Add your API keys
+cp .env.example .env               # then edit .env and add at least one key</code></pre>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.7 (pipeline stages, plain English) -->
+    <section class="section section--tight" aria-labelledby="pipeline">
+      <div class="container">
+        <h2 id="pipeline">What each pipeline stage does</h2>
+        <p>The pipeline is <strong>manually triggered</strong> by a maintainer or contributor running CLI commands. There is no scheduled automation.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Stage</th>
+                <th scope="col">Plain-English description</th>
+                <th scope="col">How it runs</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ingest</td>
+                <td>Downloads a YC essay or a YouTube transcript</td>
+                <td>Python scripts</td>
+              </tr>
+              <tr>
+                <td>Chunk</td>
+                <td>Splits long content into 200&ndash;800 word pieces</td>
+                <td>Local, no LLM</td>
+              </tr>
+              <tr>
+                <td>Extract</td>
+                <td>Reads chunks and pulls out actionable advice + verbatim quotes</td>
+                <td>LLM call #1</td>
+              </tr>
+              <tr>
+                <td>Cluster</td>
+                <td>Groups similar advice from multiple sources using embeddings</td>
+                <td>Local, no LLM</td>
+              </tr>
+              <tr>
+                <td>Synthesize</td>
+                <td>Writes each skill file from a cluster of corroborating quotes</td>
+                <td>LLM call #2</td>
+              </tr>
+              <tr>
+                <td>Link</td>
+                <td>Fills in the 3 most related skills using pre-computed similarity</td>
+                <td>Local, no LLM</td>
+              </tr>
+              <tr>
+                <td>Export</td>
+                <td>Generates MCP, OpenAI, and Hermes spec files</td>
+                <td>Local</td>
+              </tr>
+              <tr>
+                <td>Validate</td>
+                <td>Runs the 3-layer validation suite</td>
+                <td>Local + dedicated Gemini check</td>
+              </tr>
+              <tr>
+                <td>Index</td>
+                <td>Regenerates <code>skills-index.json</code> and <code>similarity_matrix.json</code></td>
+                <td>Local</td>
+              </tr>
+              <tr>
+                <td>Commit &amp; tag</td>
+                <td>Contributor commits generated files and opens a PR</td>
+                <td>Git/GitHub</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout--info">
+          <span class="callout-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 7.5 3 10l3 2.5M14 7.5l3 2.5-3 2.5M11.5 4.5l-3 11"></path>
+            </svg>
+          </span>
+          <div>
+            <p class="callout-title">Computed, not guessed</p>
+            <p><code>confidence</code> and <code>related_skills</code> are computed by the pipeline from cluster metrics and the similarity matrix &mdash; never generated by the LLM.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.10 (per-batch workflow, exact order) -->
+    <section class="section section--tight" aria-labelledby="workflow">
+      <div class="container">
+        <h2 id="workflow">Per-batch workflow</h2>
+        <!-- Cold-start warning must sit directly above the workflow it warns about (§11.5) -->
+        <!-- SOURCE: AGENTS.md §6.10 (cold-start warning, exact wording) -->
+        <div class="callout callout--warning">
+          <span class="callout-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 3.5 18 17H2L10 3.5z"></path>
+              <path d="M10 9v4M10 15.2v.1"></path>
+            </svg>
+          </span>
+          <div>
+            <p class="callout-title">Cold-start warning &mdash; read before your first run</p>
+            <p><code>data/registry.db</code> is gitignored and does not come with a fresh clone. A fresh database has zero knowledge of what was already processed on <code>main</code>. Running <code>forge</code> without <code>--topic</code> or specific URLs can regenerate duplicate <code>_v2</code> skills. Always scope your first run to new content with <code>--topic</code> or explicit URLs.</p>
+          </div>
+        </div>
+        <pre class="code" data-label="bash — per-batch workflow"><code>python -m src.cli ingest-youtube --url "https://www.youtube.com/watch?v=VIDEO_ID"
+# or: python -m src.cli ingest-library --url "https://www.ycombinator.com/library/some-essay"
+python -m src.cli chunk --all
+python -m src.cli forge --topic "your-topic" --batch-size 15
+python -m src.cli link --topic "your-topic"
+python -m src.cli export --all
+python -m src.cli validate --all
+python -m src.cli index</code></pre>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.10 (defaults from config/providers.yml — labeled as defaults) -->
+    <section class="section section--tight" aria-labelledby="quota">
+      <div class="container">
+        <h2 id="quota">Quota management</h2>
+        <p>Check your usage any time with <code>python -m src.cli quota</code>. The pipeline tracks daily token and request usage per provider, and automatically picks the best available provider by priority. Quotas reset at <strong>UTC midnight</strong>.</p>
+        <p>The table below shows the project's default limits from <code>config/providers.yml</code> &mdash; they are configurable defaults, not guaranteed provider free-tier terms.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Priority</th>
+                <th scope="col">Provider</th>
+                <th scope="col">Default model</th>
+                <th scope="col" class="num">Default daily token limit</th>
+                <th scope="col" class="num">Default daily request limit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>DeepSeek</td>
+                <td><code>deepseek-chat</code></td>
+                <td class="num">1,000,000</td>
+                <td class="num">100</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Kimi (Moonshot)</td>
+                <td><code>moonshot-v1-8k</code></td>
+                <td class="num">500,000</td>
+                <td class="num">50</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>GLM (BigModel)</td>
+                <td><code>glm-4-flash</code></td>
+                <td class="num">500,000</td>
+                <td class="num">50</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Gemini (Google)</td>
+                <td><code>gemini-1.5-flash</code></td>
+                <td class="num">1,500,000</td>
+                <td class="num">150</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>If all providers are exhausted: wait for the UTC midnight reset, add another provider's key to your <code>.env</code>, or reduce <code>--batch-size</code>.</p>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.8 (three-layer validation) -->
+    <section class="section section--tight" aria-labelledby="validation">
+      <div class="container">
+        <h2 id="validation">Validation before anything ships</h2>
+        <p>Every skill must pass the three-layer validation suite before it can be published. If validation fails, the skill moves to <code>skills/_failed/</code> and cannot be published. GitHub Actions re-runs validation on every pull request.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Layer</th>
+                <th scope="col">What it checks</th>
+                <th scope="col">Tool</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Quote verification</td>
+                <td>Each verbatim quote fuzzy-matches the source chunk</td>
+                <td>rapidfuzz &mdash; PASS if <code>ratio &ge; 70</code> AND <code>partial_ratio &ge; 85</code></td>
+              </tr>
+              <tr>
+                <td>2. Schema validation</td>
+                <td>Frontmatter matches the required Pydantic model, skill_id matches filename, related skills exist</td>
+                <td>Pydantic</td>
+              </tr>
+              <tr>
+                <td>3. Hallucination guard</td>
+                <td>No invented speakers, claims, or quotes; LLM-as-judge checks principle vs. quotes</td>
+                <td>Gemini <code>gemini-1.5-flash</code> at temperature 0.0 (dedicated, fail-open)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE: docs/BYOK.md "Submitting Your Contribution" -->
+    <section class="section section--tight" aria-labelledby="pr-flow">
+      <div class="container">
+        <h2 id="pr-flow">Contribution flow</h2>
+        <ol class="flow-list">
+          <li>Create a branch in your fork.</li>
+          <li>Stage only the generated files: <code>git add skills/ specs/ data/similarity_matrix.json skills-index.json</code>.</li>
+          <li>Commit and push to your fork.</li>
+          <li>Open a pull request on GitHub.</li>
+          <li>GitHub Actions re-runs the validation suite on your PR.</li>
+          <li>Fix any failures and push again; then the maintainers merge.</li>
+        </ol>
+        <div class="callout callout--warning">
+          <span class="callout-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 3.5 18 17H2L10 3.5z"></path>
+              <path d="M10 9v4M10 15.2v.1"></path>
+            </svg>
+          </span>
+          <div>
+            <p class="callout-title">Never commit these</p>
+            <p><code>data/registry.db</code>, <code>data/raw/</code>, <code>data/chunks/</code>, <code>data/errors/</code>, and <code>.env</code> are gitignored local state &mdash; do not commit them.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE: docs/BYOK.md "Troubleshooting Common Issues" (condensed) -->
+    <section class="section section--tight" aria-labelledby="troubleshooting">
+      <div class="container">
+        <h2 id="troubleshooting">Troubleshooting</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Error</th>
+                <th scope="col">Cause</th>
+                <th scope="col">Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ModuleNotFoundError: No module named 'src'</code></td>
+                <td>You're running from the wrong directory, or the virtual environment isn't activated</td>
+                <td><code>cd</code> to the project root, activate the virtual environment, and try again</td>
+              </tr>
+              <tr>
+                <td><code>All providers exhausted. Wait for UTC midnight reset.</code></td>
+                <td>All configured LLM providers have used up their daily quota</td>
+                <td>Wait until UTC midnight, add another provider's API key, or reduce your batch size</td>
+              </tr>
+              <tr>
+                <td><code>Minimum batch size is 5. Only N items available.</code></td>
+                <td>Not enough chunked content for the specified topic</td>
+                <td>Ingest more content for that topic, then run <code>python -m src.cli chunk --all</code></td>
+              </tr>
+              <tr>
+                <td><code>sqlite3.OperationalError: no such table: content</code></td>
+                <td>The database hasn't been initialized</td>
+                <td>Run <code>python -m src.cli init-db</code></td>
+              </tr>
+              <tr>
+                <td>Items stuck in <code>extracting</code> state</td>
+                <td>A previous pipeline run crashed mid-extraction</td>
+                <td>Run <code>python -m src.cli reaper</code> &mdash; it resets items stuck in <code>extracting</code> for over 2 hours back to <code>chunked</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><a class="btn btn-secondary" href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/BYOK.md">Read the full BYOK guide
+          <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+            <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+          </svg>
+        </a></p>
+      </div>
+    </section>
+
+    <div class="container">
+      <a class="back-to-top" href="#top">Back to top
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+          <path d="M8 13V3m0 0L4.5 6.5M8 3l3.5 3.5"></path>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3.5 5.5 7 2 10.5"></path>
+                <path d="M7.5 10.5H12"></path>
+              </svg>
+            </span>
+            OpenYC Skills
+          </a>
+          <p>Startup advice from Y Combinator's public content, distilled into composable skill files for AI agents.</p>
+        </div>
+        <nav aria-label="Footer — site">
+          <h2 class="footer-heading">Site</h2>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="agents.html">For AI Agents</a></li>
+            <li><a href="contributors.html">For Contributors</a></li>
+            <li><a href="taxonomy.html">Taxonomy</a></li>
+            <li><a href="cli.html">CLI Reference</a></li>
+            <li><a href="about.html">FAQ</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Footer — project">
+          <h2 class="footer-heading">Project</h2>
+          <ul class="footer-links">
+            <li><a href="https://github.com/HanuShashwat/openyc-skills">GitHub repo
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/CONSUMPTION.md">Consumption guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/BYOK.md">BYOK guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="footer-disclaimer">OpenYC Skills is not affiliated with, endorsed by, or built by Y Combinator. It analyzes publicly available YC content.</p>
+      <p class="footer-legal">&copy; 2026 OpenYC Skills &middot; Code: MIT &middot; Generated skills: CC BY-SA 4.0</p>
+    </div>
+  </footer>
+</body>
+</html>

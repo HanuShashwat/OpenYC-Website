@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenYC Skills — Startup advice from Y Combinator, packaged for AI agents</title>
+  <meta name="description" content="Startup advice from Y Combinator's public essays and videos, distilled into verified skill files your AI agent can load directly. Free static files — no server, no API keys.">
+  <link rel="canonical" href="https://hanushashwat.github.io/OpenYC-Website/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="OpenYC Skills">
+  <meta property="og:description" content="Startup advice from Y Combinator content, packaged for AI agents. Verified quotes, composable skill files, three agent formats — free static files.">
+  <meta property="og:url" content="https://hanushashwat.github.io/OpenYC-Website/">
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="scripts/motion.js" defer></script>
+  <script src="scripts/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3.5 5.5 7 2 10.5"></path>
+            <path d="M7.5 10.5H12"></path>
+          </svg>
+        </span>
+        OpenYC Skills
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>
+        <span class="sr-only">Toggle menu</span>
+        <svg class="icon-menu" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 5.5h14M3 10h14M3 14.5h14"></path>
+        </svg>
+        <svg class="icon-close" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M5 5l10 10M15 5 5 15"></path>
+        </svg>
+      </button>
+      <nav id="site-nav" aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="index.html" aria-current="page">Home</a></li>
+          <li><a href="agents.html">For AI Agents</a></li>
+          <li><a href="contributors.html">For Contributors</a></li>
+          <li><a href="taxonomy.html">Taxonomy</a></li>
+          <li><a href="cli.html">CLI Reference</a></li>
+          <li><a href="about.html">FAQ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- SOURCE: AGENTS.md §3.2 (30-second explanation), §3.3 (approved one-liner) -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-copy hero-in">
+          <p class="hero-eyebrow">
+            <span class="eyebrow-dot" aria-hidden="true"></span>
+            Open-source &middot; Static files &middot; BYOK
+          </p>
+          <h1>Startup advice from Y Combinator content, packaged for AI agents.</h1>
+          <p class="hero-sub">OpenYC Skills turns YC's public essays and videos into structured skill files your AI agent can load directly &mdash; with verbatim quotes, attribution, and automated validation. Consumers pay nothing. Contributors bring their own API keys.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="agents.html">Read the docs</a>
+            <a class="btn btn-secondary" href="contributors.html">Contribute</a>
+            <a class="btn btn-link" href="https://github.com/HanuShashwat/openyc-skills">
+              View on GitHub
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="hero-visual hero-in hero-in--delay">
+          <div class="terminal">
+            <div class="terminal-bar">
+              <div class="terminal-bar-left">
+                <span class="terminal-dot" aria-hidden="true"></span>
+                <span class="terminal-dot" aria-hidden="true"></span>
+                <span class="terminal-dot" aria-hidden="true"></span>
+                <span class="terminal-filename">yc-fundraising-seed-round-timing.md</span>
+              </div>
+              <span class="terminal-actions">
+                <span class="terminal-badge">Illustrative example</span>
+              </span>
+            </div>
+            <!-- SOURCE: AGENTS.md §6.4 (skill anatomy). Content below is a simplified,
+                 clearly labeled illustrative example — no skill files are published yet. -->
+            <pre class="code" data-label="illustrative skill file"><code>---
+skill_id: yc-fundraising-seed-round-timing
+name: Seed Round Timing
+version: "1.0.0"
+category: fundraising
+tags: [seed, runway, timing]
+source_count: 12
+quote_count: 3
+confidence: 0.92
+validation:
+  quote_verified: true
+  schema_valid: true
+  hallucination_check: true
+---
+
+# Seed Round Timing
+
+## Principle
+The optimal time to raise is when you still have runway
+and can negotiate from strength, not desperation.
+
+## Verbatim Quotes
+- "The best time to raise money is when you don't need it."
+  — Paul Graham, Founder of YC
+
+## Fallback Behavior
+Return the 3 closest skills. Never invent YC quotes.</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="problem-heading">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">Why it exists</span>
+          <h2 id="problem-heading">Vague advice is risky. Verbatim advice is usable.</h2>
+        </div>
+        <p>Ask an AI agent a startup question and you often get confident advice with no source, no speaker, and no way to check it. OpenYC Skills fixes that by distilling Y Combinator's public content &mdash; Library essays and YouTube videos &mdash; into skill files where every quote is verbatim, attributed to a named speaker, and checked by an automated validation pipeline.</p>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.1 (the three core promises) -->
+    <section class="section" aria-labelledby="promises-heading">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">The core promises</span>
+          <h2 id="promises-heading">Three promises, kept by design</h2>
+          <p class="section-lead">Everything on this site traces back to one idea: verified YC advice your AI agent can actually use.</p>
+        </div>
+        <div class="grid grid--promises">
+          <article class="card card--pad card--lift">
+            <span class="card-icon card-icon--accent" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 3v9m0 0 3.5-3.5M10 12 6.5 8.5"></path>
+                <path d="M4 13.5v2A1.5 1.5 0 0 0 5.5 17h9a1.5 1.5 0 0 0 1.5-1.5v-2"></path>
+              </svg>
+            </span>
+            <h3 class="card-title">Zero cost for consumers</h3>
+            <p class="card-text">Download static files from GitHub. No API keys, no database, no embedding models, no Python.</p>
+          </article>
+          <article class="card card--pad card--lift">
+            <span class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 8.5c0-2 1.2-3.5 3-3.5M7 8.5v4.8c0 .9.7 1.7 1.7 1.7h.8M7 8.5H5.8c-.9 0-1.8.7-1.8 1.7v2.1c0 .9.7 1.7 1.7 1.7h1.8"></path>
+                <path d="M14.5 8.5c0-2-1.2-3.5-3-3.5m3 3.5v4.8c0 .9-.7 1.7-1.7 1.7H13m1.5-6.5h1.2c.9 0 1.8.7 1.8 1.7v2.1c0 .9-.7 1.7-1.7 1.7h-1.8"></path>
+              </svg>
+            </span>
+            <h3 class="card-title">Exact quote fidelity</h3>
+            <p class="card-text">Every quote attributed to a YC speaker is verbatim from the original transcript or essay. No paraphrasing in attribution blocks &mdash; enforced by automated validation.</p>
+          </article>
+          <article class="card card--pad card--lift">
+            <span class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8.5 11.5l3-3"></path>
+                <path d="M9 6.8 10.3 5.5a2.6 2.6 0 0 1 3.7 3.7L12.7 10.5"></path>
+                <path d="M11 13.2 9.7 14.5a2.6 2.6 0 0 1-3.7-3.7L7.3 9.5"></path>
+              </svg>
+            </span>
+            <h3 class="card-title">Composable skills</h3>
+            <p class="card-text">Each skill covers one narrow micro-topic and links to related skills using pre-computed cosine similarity &mdash; math, not guesswork.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §3.4 (analogy) and §6.7 (pipeline stages, plain English) -->
+    <section class="section" aria-labelledby="how-heading">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">How it works</span>
+          <h2 id="how-heading">From YC content to a card your agent can follow</h2>
+          <p class="section-lead">Think of each skill file as a <strong>recipe card</strong> for an AI agent. The card says what the advice is, who said it (with the exact quote), when to use it, what questions to ask the founder, and which other cards are related. The agent reads the card and follows it.</p>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <h3 class="step-title">Ingest YC content</h3>
+            <p class="step-text">A contributor downloads a YC Library essay or a YouTube transcript (English captions only).</p>
+          </li>
+          <li class="step">
+            <h3 class="step-title">Distill into skill files</h3>
+            <p class="step-text">LLMs extract actionable advice and verbatim quotes, then cluster corroborating sources into one skill file per micro-topic.</p>
+          </li>
+          <li class="step">
+            <h3 class="step-title">Verify every quote</h3>
+            <p class="step-text">Each quote is fuzzy-matched against its source and schema-checked. Anything that fails cannot be published.</p>
+          </li>
+          <li class="step">
+            <h3 class="step-title">Agents load the files</h3>
+            <p class="step-text">Skills ship as static files in three formats &mdash; MCP, OpenAI function calling, and Hermes. No server, no runtime.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.3 (8 categories, exact names/descriptions) -->
+    <section class="section" aria-labelledby="taxonomy-heading">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">The taxonomy</span>
+          <h2 id="taxonomy-heading">Eight categories. One home for every skill.</h2>
+          <p class="section-lead">Every skill belongs to exactly one category, from fundraising to founder mental models.</p>
+        </div>
+        <div class="grid grid--categories">
+          <a class="card card--pad card--lift card-link category-card" href="taxonomy.html">
+            <h3 class="card-title">fundraising</h3>
+            <p class="card-text">Raising capital from investors</p>
+            <span class="card-cta">Explore
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10m0 0-3.5-3.5M13 8 9.5 11.5"></path>
+              </svg>
+            </span>
+          </a>
+          <a class="card card--pad card--lift card-link category-card" href="taxonomy.html">
+            <h3 class="card-title">hiring</h3>
+            <p class="card-text">Building the team</p>
+            <span class="card-cta">Explore
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10m0 0-3.5-3.5M13 8 9.5 11.5"></path>
+              </svg>
+            </span>
+          </a>
+          <a class="card card--pad card--lift card-link category-card" href="taxonomy.html">
+            <h3 class="card-title">product</h3>
+            <p class="card-text">Product development &amp; management</p>
+            <span class="card-cta">Explore
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10m0 0-3.5-3.5M13 8 9.5 11.5"></path>
+              </svg>
+            </span>
+          </a>
+          <a class="card card--pad card--lift card-link category-card" href="taxonomy.html">
+            <h3 class="card-title">growth</h3>
+            <p class="card-text">Acquiring and retaining users</p>
+            <span class="card-cta">Explore
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10m0 0-3.5-3.5M13 8 9.5 11.5"></path>
+              </svg>
+            </span>
+          </a>
+          <a class="card card--pad card--lift card-link category-card" href="taxonomy.html">
+            <h3 class="card-title">culture</h3>
+            <p class="card-text">Company culture &amp; operations</p>
+            <span class="card-cta">Explore
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10m0 0-3.5-3.5M13 8 9.5 11.5"></path>
+              </svg>
+            </span>
+          </a>
+          <a class="card card--pad card--lift card-link category-card" href="taxonomy.html">
+            <h3 class="card-title">strategy</h3>
+            <p class="card-text">High-level company decisions</p>
+            <span class="card-cta">Explore
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10m0 0-3.5-3.5M13 8 9.5 11.5"></path>
+              </svg>
+            </span>
+          </a>
+          <a class="card card--pad card--lift card-link category-card" href="taxonomy.html">
+            <h3 class="card-title">founder-mental-models</h3>
+            <p class="card-text">Founder psychology &amp; decision-making</p>
+            <span class="card-cta">Explore
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10m0 0-3.5-3.5M13 8 9.5 11.5"></path>
+              </svg>
+            </span>
+          </a>
+          <a class="card card--pad card--lift card-link category-card" href="taxonomy.html">
+            <h3 class="card-title">technical</h3>
+            <p class="card-text">Engineering &amp; infrastructure</p>
+            <span class="card-cta">Explore
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 8h10m0 0-3.5-3.5M13 8 9.5 11.5"></path>
+              </svg>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="audience-heading">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">Who it's for</span>
+          <h2 id="audience-heading">Two paths in</h2>
+        </div>
+        <div class="grid grid--audience">
+          <article class="card card--pad">
+            <h3 class="card-title">For AI agents</h3>
+            <p class="card-text">Give your agent verified startup advice in minutes. Download the files, load the format that matches your framework, and follow the fallback rules. No Python, no keys.</p>
+            <a class="btn btn-secondary" href="agents.html">Get started as a consumer</a>
+          </article>
+          <article class="card card--pad">
+            <h3 class="card-title">For contributors</h3>
+            <p class="card-text">Fork the repo, bring your own API keys, and run a few commands to generate new skills. Validation runs automatically before anything ships.</p>
+            <a class="btn btn-secondary" href="contributors.html">Contribute skills</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §8.7 FAQ items; answers from docs/CONSUMPTION.md FAQ -->
+    <section class="section section--tight" aria-labelledby="faq-teaser-heading">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">Quick answers</span>
+          <h2 id="faq-teaser-heading">Before you dive in</h2>
+        </div>
+        <ul class="faq-teaser">
+          <li><a href="about.html#q-python">Do I need Python or API keys to <em>use</em> skills? <span aria-hidden="true">&rarr;</span></a></li>
+          <li><a href="about.html#q-verified">How do quotes get verified? <span aria-hidden="true">&rarr;</span></a></li>
+          <li><a href="about.html#q-frequency">How often are new skills added? <span aria-hidden="true">&rarr;</span></a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3.5 5.5 7 2 10.5"></path>
+                <path d="M7.5 10.5H12"></path>
+              </svg>
+            </span>
+            OpenYC Skills
+          </a>
+          <p>Startup advice from Y Combinator's public content, distilled into composable skill files for AI agents.</p>
+        </div>
+        <nav aria-label="Footer — site">
+          <h2 class="footer-heading">Site</h2>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="agents.html">For AI Agents</a></li>
+            <li><a href="contributors.html">For Contributors</a></li>
+            <li><a href="taxonomy.html">Taxonomy</a></li>
+            <li><a href="cli.html">CLI Reference</a></li>
+            <li><a href="about.html">FAQ</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Footer — project">
+          <h2 class="footer-heading">Project</h2>
+          <ul class="footer-links">
+            <li><a href="https://github.com/HanuShashwat/openyc-skills">GitHub repo
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/CONSUMPTION.md">Consumption guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/BYOK.md">BYOK guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+          </ul>
+        </nav>
+      </div>
+      <!-- SOURCE: AGENTS.md §16.1.1 (disclaimer is required) -->
+      <p class="footer-disclaimer">OpenYC Skills is not affiliated with, endorsed by, or built by Y Combinator. It analyzes publicly available YC content.</p>
+      <!-- SOURCE: AGENTS.md §6.11 (licenses) -->
+      <p class="footer-legal">&copy; 2026 OpenYC Skills &middot; Code: MIT &middot; Generated skills: CC BY-SA 4.0</p>
+    </div>
+  </footer>
+</body>
+</html>

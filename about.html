@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FAQ & License — OpenYC Skills</title>
+  <meta name="description" content="Frequently asked questions about OpenYC Skills — using skills, generating them, quote verification, confidence, release cadence — plus license details (MIT + CC BY-SA 4.0) and the Y Combinator disclaimer.">
+  <link rel="canonical" href="https://hanushashwat.github.io/OpenYC-Website/about.html">
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="scripts/motion.js" defer></script>
+  <script src="scripts/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3.5 5.5 7 2 10.5"></path>
+            <path d="M7.5 10.5H12"></path>
+          </svg>
+        </span>
+        OpenYC Skills
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>
+        <span class="sr-only">Toggle menu</span>
+        <svg class="icon-menu" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 5.5h14M3 10h14M3 14.5h14"></path>
+        </svg>
+        <svg class="icon-close" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M5 5l10 10M15 5 5 15"></path>
+        </svg>
+      </button>
+      <nav id="site-nav" aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="agents.html">For AI Agents</a></li>
+          <li><a href="contributors.html">For Contributors</a></li>
+          <li><a href="taxonomy.html">Taxonomy</a></li>
+          <li><a href="cli.html">CLI Reference</a></li>
+          <li><a href="about.html" aria-current="page">FAQ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="container">
+        <h1 class="page-title">FAQ &amp; License</h1>
+        <p class="page-lead">Straight answers about using and generating skills, how verification works, and what you can do with the files.</p>
+      </div>
+    </section>
+
+    <!-- SOURCE: docs/CONSUMPTION.md FAQ + AGENTS.md §6.8/§6.6/§6.10 -->
+    <section class="section section--tight" aria-labelledby="faq">
+      <div class="container">
+        <h2 id="faq">Frequently asked questions</h2>
+        <div class="faq">
+          <details class="faq-item" id="q-python">
+            <summary>
+              Do I need Python or API keys to <em>use</em> skills?
+              <span class="summary-chevron" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m4 6 4 4 4-4"></path>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-body">
+              <div class="faq-inner">
+                <p><strong>No.</strong> Skills are static Markdown and JSON files. You can read them with any programming language &mdash; no Python, no API keys, no database, no embedding models.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="faq-item" id="q-generate">
+            <summary>
+              Do I need API keys to <em>generate</em> skills?
+              <span class="summary-chevron" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m4 6 4 4 4-4"></path>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-body">
+              <div class="faq-inner">
+                <p><strong>Yes.</strong> Generating skills is a BYOK model: contributors supply at least one LLM API key (DeepSeek, Kimi, GLM, or Gemini) and run the pipeline locally. See <a href="contributors.html">For Contributors</a>.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="faq-item" id="q-verified">
+            <summary>
+              How do quotes get verified?
+              <span class="summary-chevron" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m4 6 4 4 4-4"></path>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-body">
+              <div class="faq-inner">
+                <p>A three-layer validation suite: fuzzy quote verification against the source chunk (rapidfuzz), schema validation of the skill's frontmatter (Pydantic), and a hallucination guard that checks for invented speakers, claims, or quotes (Gemini as LLM-as-judge). Skills that fail move to <code>skills/_failed/</code> and cannot be published. GitHub Actions re-runs validation on every pull request.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="faq-item" id="q-some">
+            <summary>
+              Can I use only some skills, not all of them?
+              <span class="summary-chevron" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m4 6 4 4 4-4"></path>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-body">
+              <div class="faq-inner">
+                <p><strong>Yes.</strong> Pick and choose the skills relevant to your use case. The <code>by_category</code> and <code>by_tag</code> lookups in <code>skills-index.json</code> make filtering easy, and the <code>/category</code> and <code>%tag</code> signal prefixes route queries to a subset.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="faq-item" id="q-confidence">
+            <summary>
+              What does a low confidence score mean?
+              <span class="summary-chevron" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m4 6 4 4 4-4"></path>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-body">
+              <div class="faq-inner">
+                <p>Confidence is a 0.0&ndash;1.0 score computed from cluster metrics &mdash; not the LLM's opinion. A low score means fewer sources corroborated the advice, or sources disagreed. The skill is still valid but should be treated as less authoritative; consider pairing it with related higher-confidence skills.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="faq-item" id="q-frequency">
+            <summary>
+              How often are new skills added?
+              <span class="summary-chevron" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m4 6 4 4 4-4"></path>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-body">
+              <div class="faq-inner">
+                <p>Skills are added manually by contributors &mdash; there is no fixed schedule. Watch the repository or check Releases for updates.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="faq-item" id="q-index">
+            <summary>
+              What's the difference between <code>skills-index.json</code> and <code>similarity_matrix.json</code>?
+              <span class="summary-chevron" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m4 6 4 4 4-4"></path>
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-body">
+              <div class="faq-inner">
+                <p><code>skills-index.json</code> is a <strong>lookup table</strong> &mdash; find skills by ID, tag, or category. <code>similarity_matrix.json</code> is a <strong>relationship matrix</strong> &mdash; pre-computed cosine similarity between every pair of skills, used for fuzzy search and <code>related_skills</code>.</p>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.11 (licensing and attribution, exact) -->
+    <section class="section section--tight" aria-labelledby="license">
+      <div class="container">
+        <h2 id="license">License &amp; attribution</h2>
+        <ul>
+          <li><strong>Code:</strong> MIT License &mdash; use freely.</li>
+          <li><strong>Generated skill content:</strong> CC BY-SA 4.0 &mdash; attribution required, share alike.</li>
+          <li><strong>Raw YC content:</strong> never redistributed. Raw files are gitignored; only short verbatim quotes with attribution are published.</li>
+          <li>The project docs recommend legal review before commercial use of reproduced quotes &mdash; fair use is fact-specific.</li>
+        </ul>
+        <div class="callout callout--info">
+          <span class="callout-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 4.5c-3.5 0-6 2.5-6 5.5s2.5 5.5 6 5.5 6-2.5 6-5.5-2.5-5.5-6-5.5z"></path>
+              <path d="M10 8.5v3M10 7.2v.1"></path>
+            </svg>
+          </span>
+          <div>
+            <p class="callout-title">What this project is not</p>
+            <p>OpenYC Skills is not affiliated with, endorsed by, or built by Y Combinator &mdash; it analyzes publicly available YC content. It is not OpenAI; the "OpenAI spec format" is a file format for OpenAI-compatible agents, not a relationship with OpenAI. MCP is a spec format, not a hosted server.</p>
+          </div>
+        </div>
+        <p><a class="btn btn-secondary" href="https://github.com/HanuShashwat/openyc-skills/blob/main/README.md">Read the full README
+          <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+            <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+          </svg>
+        </a></p>
+      </div>
+    </section>
+
+    <div class="container">
+      <a class="back-to-top" href="#top">Back to top
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+          <path d="M8 13V3m0 0L4.5 6.5M8 3l3.5 3.5"></path>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3.5 5.5 7 2 10.5"></path>
+                <path d="M7.5 10.5H12"></path>
+              </svg>
+            </span>
+            OpenYC Skills
+          </a>
+          <p>Startup advice from Y Combinator's public content, distilled into composable skill files for AI agents.</p>
+        </div>
+        <nav aria-label="Footer — site">
+          <h2 class="footer-heading">Site</h2>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="agents.html">For AI Agents</a></li>
+            <li><a href="contributors.html">For Contributors</a></li>
+            <li><a href="taxonomy.html">Taxonomy</a></li>
+            <li><a href="cli.html">CLI Reference</a></li>
+            <li><a href="about.html">FAQ</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Footer — project">
+          <h2 class="footer-heading">Project</h2>
+          <ul class="footer-links">
+            <li><a href="https://github.com/HanuShashwat/openyc-skills">GitHub repo
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/CONSUMPTION.md">Consumption guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/BYOK.md">BYOK guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="footer-disclaimer">OpenYC Skills is not affiliated with, endorsed by, or built by Y Combinator. It analyzes publicly available YC content.</p>
+      <p class="footer-legal">&copy; 2026 OpenYC Skills &middot; Code: MIT &middot; Generated skills: CC BY-SA 4.0</p>
+    </div>
+  </footer>
+</body>
+</html>

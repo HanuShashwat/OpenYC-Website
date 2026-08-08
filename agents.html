@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>For AI Agents — OpenYC Skills</title>
+  <meta name="description" content="How to load OpenYC Skills into your AI agent: what you get, the three spec formats, signal routing, fallback rules, and copy-paste Python examples. No server, no API keys.">
+  <link rel="canonical" href="https://hanushashwat.github.io/OpenYC-Website/agents.html">
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="scripts/motion.js" defer></script>
+  <script src="scripts/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3.5 5.5 7 2 10.5"></path>
+            <path d="M7.5 10.5H12"></path>
+          </svg>
+        </span>
+        OpenYC Skills
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>
+        <span class="sr-only">Toggle menu</span>
+        <svg class="icon-menu" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 5.5h14M3 10h14M3 14.5h14"></path>
+        </svg>
+        <svg class="icon-close" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M5 5l10 10M15 5 5 15"></path>
+        </svg>
+      </button>
+      <nav id="site-nav" aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="agents.html" aria-current="page">For AI Agents</a></li>
+          <li><a href="contributors.html">For Contributors</a></li>
+          <li><a href="taxonomy.html">Taxonomy</a></li>
+          <li><a href="cli.html">CLI Reference</a></li>
+          <li><a href="about.html">FAQ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="container">
+        <h1 class="page-title">OpenYC Skills for AI Agents</h1>
+        <p class="page-lead">Give your agent verified startup advice from Y Combinator's public content &mdash; no server, no API keys, no Python. Just static files you load into your agent.</p>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.2 (outputs); table wording from docs/CONSUMPTION.md "What You're Getting" -->
+    <section class="section section--tight" aria-labelledby="what-you-get">
+      <div class="container">
+        <h2 id="what-you-get">What you get</h2>
+        <p>These are the only files you care about as a consumer. Everything else in the repo &mdash; <code>src/</code>, <code>config/</code>, <code>data/raw/</code>, <code>data/chunks/</code> &mdash; is for contributors who generate skills.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">File / directory</th>
+                <th scope="col">What it contains</th>
+                <th scope="col">Use it when</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>skills/{category}/{skill_id}.md</code></td>
+                <td>The skill content &mdash; principle, verbatim quotes, application instructions, edge cases</td>
+                <td>You want the full knowledge content</td>
+              </tr>
+              <tr>
+                <td><code>specs/mcp/{skill_id}.json</code></td>
+                <td>MCP (Model Context Protocol) spec</td>
+                <td>Your agent uses Claude Code or MCP-compatible frameworks</td>
+              </tr>
+              <tr>
+                <td><code>specs/openai/{skill_id}.json</code></td>
+                <td>OpenAI function-calling spec</td>
+                <td>Your agent uses GPT or the OpenAI API</td>
+              </tr>
+              <tr>
+                <td><code>specs/hermes/{skill_id}.txt</code></td>
+                <td>Plain-text system prompt fragment</td>
+                <td>Your agent runs on a local model (Ollama, llama.cpp)</td>
+              </tr>
+              <tr>
+                <td><code>skills-index.json</code></td>
+                <td>Machine-readable index of all skills</td>
+                <td>Looking up skills by ID, category, or tag</td>
+              </tr>
+              <tr>
+                <td><code>data/similarity_matrix.json</code></td>
+                <td>Pre-computed similarity scores between skills</td>
+                <td>Fuzzy or semantic skill search</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout--info">
+          <span class="callout-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="10" cy="10" r="7.5"></circle>
+              <path d="M10 6.5v4l2.5 1.5"></path>
+            </svg>
+          </span>
+          <div>
+            <p class="callout-title">Published incrementally</p>
+            <p>Skills are added manually by contributors with no fixed schedule. The <code>skills/</code> directory currently contains no published files, so the example paths and skill IDs on this page are illustrative &mdash; check <code>skills-index.json</code> in the repo for the current state.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE: docs/CONSUMPTION.md "Getting the Files" (three exact methods) -->
+    <section class="section section--tight" aria-labelledby="getting-files">
+      <div class="container">
+        <h2 id="getting-files">Three ways to get the files</h2>
+        <h3>1. Clone the repository</h3>
+        <pre class="code" data-label="bash"><code>git clone https://github.com/HanuShashwat/openyc-skills.git</code></pre>
+        <p>Then access files at <code>openyc-skills/skills/</code>, <code>openyc-skills/specs/</code>, and so on.</p>
+
+        <h3>2. Download a release bundle</h3>
+        <p>Check the <a href="https://github.com/HanuShashwat/openyc-skills/releases">Releases page</a> for <code>skills-bundle.zip</code>, which contains all skills, specs, and index files.</p>
+
+        <h3>3. Fetch individual files via raw URLs</h3>
+        <p>Fetch any file directly over HTTPS &mdash; useful for agents that load skills on demand without cloning the full repo.</p>
+        <pre class="code" data-label="illustrative raw URLs"><code>https://raw.githubusercontent.com/HanuShashwat/openyc-skills/main/skills/fundraising/yc-fundraising-seed-round-timing.md
+https://raw.githubusercontent.com/HanuShashwat/openyc-skills/main/specs/mcp/yc-fundraising-seed-round-timing.json
+https://raw.githubusercontent.com/HanuShashwat/openyc-skills/main/skills-index.json</code></pre>
+        <p class="text-muted">The two skill paths above are illustrative &mdash; they exist once skills are published.</p>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.5 (spec formats, exact) -->
+    <section class="section section--tight" aria-labelledby="formats">
+      <div class="container">
+        <h2 id="formats">Which format should I use?</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Format</th>
+                <th scope="col">File</th>
+                <th scope="col">Used by</th>
+                <th scope="col">Key characteristics</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>MCP</code></td>
+                <td><code>specs/mcp/{skill_id}.json</code></td>
+                <td>Claude Code, MCP-compatible frameworks</td>
+                <td>Tool definition: <code>name</code>, <code>description</code>, <code>inputSchema</code>, <code>handler.path</code>, <code>tags</code>, <code>fallback</code></td>
+              </tr>
+              <tr>
+                <td><code>OpenAI</code></td>
+                <td><code>specs/openai/{skill_id}.json</code></td>
+                <td>GPT, OpenAI API function calling</td>
+                <td><code>{"type":"function","function":{...}}</code> plus custom <code>metadata</code> (skill_file, category, tags, fallback)</td>
+              </tr>
+              <tr>
+                <td><code>Hermes</code></td>
+                <td><code>specs/hermes/{skill_id}.txt</code></td>
+                <td>Ollama, llama.cpp, local models</td>
+                <td>Plain text with <code>[SKILL: ...]</code> / <code>[END SKILL]</code> delimiters, injected into system prompts</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Pick the format that matches your framework:</p>
+        <ul>
+          <li>Claude Code &rarr; MCP</li>
+          <li>GPT / OpenAI API &rarr; OpenAI</li>
+          <li>Local models (Ollama, llama.cpp) &rarr; Hermes</li>
+          <li>Custom framework &rarr; read the skill <code>.md</code> files directly</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SOURCE: docs/CONSUMPTION.md "Finding Skills — Signal Resolution & Routing" -->
+    <section class="section section--tight" aria-labelledby="finding-skills">
+      <div class="container">
+        <h2 id="finding-skills">How agents find skills</h2>
+        <p>When your agent receives a question, it resolves a signal to the right skill or skills:</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Signal</th>
+                <th scope="col">Example</th>
+                <th scope="col">Returns</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Exact ID lookup</td>
+                <td><code>yc-fundraising-seed-round-timing</code></td>
+                <td>That skill's file at <code>skills/fundraising/yc-fundraising-seed-round-timing.md</code></td>
+              </tr>
+              <tr>
+                <td>Category filter (<code>/</code>)</td>
+                <td><code>/fundraising</code></td>
+                <td>All skills in the <code>skills/fundraising/</code> directory</td>
+              </tr>
+              <tr>
+                <td>Subcategory filter</td>
+                <td><code>/fundraising/seed-round</code></td>
+                <td>Skills matching <code>yc-fundraising-seed-round-*</code></td>
+              </tr>
+              <tr>
+                <td>Tag filter (<code>%</code>)</td>
+                <td><code>%seed</code></td>
+                <td>All skills with <code>seed</code> in their tags</td>
+              </tr>
+              <tr>
+                <td>Multi-tag AND</td>
+                <td><code>%seed,runway</code></td>
+                <td>Skills tagged with <em>both</em> <code>seed</code> and <code>runway</code></td>
+              </tr>
+              <tr>
+                <td>Fuzzy search (no prefix)</td>
+                <td><code>fundraising timing</code></td>
+                <td>The 3 most similar skills via the similarity matrix</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p><code>skills-index.json</code> provides the <code>by_id</code>, <code>by_tag</code>, and <code>by_category</code> lookup tables. <code>data/similarity_matrix.json</code> holds pre-computed cosine similarity scores &mdash; no machine-learning libraries needed at runtime.</p>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.5 fallback rules + docs/CONSUMPTION.md §13 (exact Wrong/Right example) -->
+    <section class="section section--tight" aria-labelledby="fallback">
+      <div class="container">
+        <h2 id="fallback">Fallback behavior &mdash; the most important rule</h2>
+        <div class="callout callout--info">
+          <span class="callout-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 4.5c-3.5 0-6 2.5-6 5.5s2.5 5.5 6 5.5 6-2.5 6-5.5-2.5-5.5-6-5.5z"></path>
+              <path d="M10 8.5v3M10 7.2v.1"></path>
+            </svg>
+          </span>
+          <div>
+            <p class="callout-title">Identical in every spec</p>
+            <ul>
+              <li>If no skill matches the user's question, return the <strong>3 closest skills</strong>.</li>
+              <li>The agent may use its own general knowledge, <strong>clearly labeled as general advice</strong>.</li>
+              <li>The agent must <strong>never invent YC quotes</strong> (<code>invent_quotes: false</code>).</li>
+            </ul>
+          </div>
+        </div>
+        <h3>Wrong vs. right (illustrative example from the consumption guide)</h3>
+        <p><strong>Wrong:</strong> <em>As Paul Graham says, "You should always raise money when you have traction."</em> (If this exact quote doesn't appear in a skill file, the agent invented it.)</p>
+        <p><strong>Right:</strong> <em>Paul Graham has spoken about the importance of timing in fundraising. For his exact advice, see the skill "yc-fundraising-seed-round-timing".</em></p>
+      </div>
+    </section>
+
+    <!-- SOURCE: docs/CONSUMPTION.md "Integration Examples" (code copied verbatim) -->
+    <section class="section section--tight" aria-labelledby="examples">
+      <div class="container">
+        <h2 id="examples">Integration examples</h2>
+        <p>The examples below are copied from the <a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/CONSUMPTION.md">consumption guide</a>. The skill IDs they reference are illustrative until skills are published.</p>
+
+        <h3>Look up a skill by ID</h3>
+        <pre class="code" data-label="python — skills-index.json lookup"><code>import json
+
+with open("skills-index.json") as f:
+    index = json.load(f)
+
+skill_info = index["by_id"].get("yc-fundraising-seed-round-timing")
+if skill_info:
+    print(f"Found: {skill_info['name']} at {skill_info['path']}")
+    # Load the skill file
+    with open(skill_info["path"]) as f:
+        skill_content = f.read()</code></pre>
+
+        <h3>OpenAI function calling</h3>
+        <pre class="code" data-label="python — OpenAI API"><code>import json
+import openai
+
+# 1. Load the spec file
+with open("specs/openai/yc-fundraising-seed-round-timing.json") as f:
+    tool_spec = json.load(f)
+
+# 2. Load the skill content
+with open(tool_spec["metadata"]["skill_file"]) as f:
+    skill_content = f.read()
+
+# 3. Add the tool to your OpenAI API call
+response = openai.chat.completions.create(
+    model="gpt-4",
+    messages=[
+        {"role": "system", "content": f"You are a startup advisor. Use this knowledge:\n\n{skill_content}"},
+        {"role": "user", "content": "I have 4 months of runway. Should I raise now?"}
+    ],
+    tools=[tool_spec],  # Pass the spec as a tool definition
+    tool_choice="auto"
+)</code></pre>
+
+        <h3>Hermes specs for local models</h3>
+        <pre class="code" data-label="python — Hermes system prompt"><code>import os
+
+# Load all Hermes skill specs
+skills_text = ""
+hermes_dir = "specs/hermes/"
+for filename in os.listdir(hermes_dir):
+    if filename.endswith(".txt"):
+        with open(os.path.join(hermes_dir, filename)) as f:
+            skills_text += f.read() + "\n\n"
+
+# Use as system prompt
+system_prompt = f"""You are a startup advisor powered by Y Combinator knowledge.
+Use the following skills to answer founder questions:
+
+{skills_text}
+
+IMPORTANT RULES:
+- Only use quotes marked as VERBATIM QUOTES. Never invent new YC quotes.
+- Follow the AGENT PROTOCOL for each matching skill.
+- If no skill matches, say so and use your general knowledge clearly labeled as such.
+"""
+
+# Now pass system_prompt to your local model</code></pre>
+
+        <p><a class="btn btn-secondary" href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/CONSUMPTION.md">Read the full consumption guide
+          <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+            <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+          </svg>
+        </a></p>
+      </div>
+    </section>
+
+    <div class="container">
+      <a class="back-to-top" href="#top">Back to top
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+          <path d="M8 13V3m0 0L4.5 6.5M8 3l3.5 3.5"></path>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3.5 5.5 7 2 10.5"></path>
+                <path d="M7.5 10.5H12"></path>
+              </svg>
+            </span>
+            OpenYC Skills
+          </a>
+          <p>Startup advice from Y Combinator's public content, distilled into composable skill files for AI agents.</p>
+        </div>
+        <nav aria-label="Footer — site">
+          <h2 class="footer-heading">Site</h2>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="agents.html">For AI Agents</a></li>
+            <li><a href="contributors.html">For Contributors</a></li>
+            <li><a href="taxonomy.html">Taxonomy</a></li>
+            <li><a href="cli.html">CLI Reference</a></li>
+            <li><a href="about.html">FAQ</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Footer — project">
+          <h2 class="footer-heading">Project</h2>
+          <ul class="footer-links">
+            <li><a href="https://github.com/HanuShashwat/openyc-skills">GitHub repo
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/CONSUMPTION.md">Consumption guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/BYOK.md">BYOK guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="footer-disclaimer">OpenYC Skills is not affiliated with, endorsed by, or built by Y Combinator. It analyzes publicly available YC content.</p>
+      <p class="footer-legal">&copy; 2026 OpenYC Skills &middot; Code: MIT &middot; Generated skills: CC BY-SA 4.0</p>
+    </div>
+  </footer>
+</body>
+</html>

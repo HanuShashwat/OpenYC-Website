@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CLI Reference — OpenYC Skills</title>
+  <meta name="description" content="Every OpenYC Skills CLI command, exactly as shipped: init-db, ingest-library, ingest-youtube, chunk, forge, link, validate, export, index, reaper, quota, backfill.">
+  <link rel="canonical" href="https://hanushashwat.github.io/OpenYC-Website/cli.html">
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="scripts/motion.js" defer></script>
+  <script src="scripts/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3.5 5.5 7 2 10.5"></path>
+            <path d="M7.5 10.5H12"></path>
+          </svg>
+        </span>
+        OpenYC Skills
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>
+        <span class="sr-only">Toggle menu</span>
+        <svg class="icon-menu" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 5.5h14M3 10h14M3 14.5h14"></path>
+        </svg>
+        <svg class="icon-close" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M5 5l10 10M15 5 5 15"></path>
+        </svg>
+      </button>
+      <nav id="site-nav" aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="agents.html">For AI Agents</a></li>
+          <li><a href="contributors.html">For Contributors</a></li>
+          <li><a href="taxonomy.html">Taxonomy</a></li>
+          <li><a href="cli.html" aria-current="page">CLI Reference</a></li>
+          <li><a href="about.html">FAQ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="container">
+        <h1 class="page-title">OpenYC Skills CLI Reference</h1>
+        <p class="page-lead">All 12 commands, exactly as shipped. Every command runs as <code>python -m src.cli &lt;command&gt;</code> from the project root.</p>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.9 (exact commands — copy verbatim, do not rename flags) -->
+    <section class="section section--tight" aria-labelledby="commands">
+      <div class="container">
+        <h2 id="commands">The commands</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Command</th>
+                <th scope="col">What it does</th>
+                <th scope="col">Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>init-db</code></td>
+                <td>Creates the SQLite database (idempotent)</td>
+                <td><code>python -m src.cli init-db</code></td>
+              </tr>
+              <tr>
+                <td><code>ingest-library</code></td>
+                <td>Downloads a YC Library essay</td>
+                <td><code>python -m src.cli ingest-library --url "https://www.ycombinator.com/library/some-essay"</code></td>
+              </tr>
+              <tr>
+                <td><code>ingest-youtube</code></td>
+                <td>Downloads a YouTube transcript (not the video)</td>
+                <td><code>python -m src.cli ingest-youtube --url "https://www.youtube.com/watch?v=VIDEO_ID"</code></td>
+              </tr>
+              <tr>
+                <td><code>chunk</code></td>
+                <td>Splits downloaded content into chunks</td>
+                <td><code>python -m src.cli chunk --all</code></td>
+              </tr>
+              <tr>
+                <td><code>forge</code></td>
+                <td>Runs extract &rarr; cluster &rarr; synthesize</td>
+                <td><code>python -m src.cli forge --topic "fundraising" --batch-size 15</code></td>
+              </tr>
+              <tr>
+                <td><code>link</code></td>
+                <td>Populates <code>related_skills</code> from the similarity matrix</td>
+                <td><code>python -m src.cli link --topic "fundraising"</code></td>
+              </tr>
+              <tr>
+                <td><code>validate</code></td>
+                <td>Runs the 3-layer validation suite</td>
+                <td><code>python -m src.cli validate --all</code></td>
+              </tr>
+              <tr>
+                <td><code>export</code></td>
+                <td>Generates MCP, OpenAI, Hermes specs</td>
+                <td><code>python -m src.cli export --all</code></td>
+              </tr>
+              <tr>
+                <td><code>index</code></td>
+                <td>Regenerates <code>skills-index.json</code> + similarity matrix</td>
+                <td><code>python -m src.cli index</code></td>
+              </tr>
+              <tr>
+                <td><code>reaper</code></td>
+                <td>Recovers items stuck in <code>extracting</code> state (after 2h)</td>
+                <td><code>python -m src.cli reaper</code></td>
+              </tr>
+              <tr>
+                <td><code>quota</code></td>
+                <td>Shows today's token/request usage per LLM provider</td>
+                <td><code>python -m src.cli quota</code></td>
+              </tr>
+              <tr>
+                <td><code>backfill</code></td>
+                <td>Bulk-ingests historical content</td>
+                <td><code>python -m src.cli backfill --start-date 2020-01-01</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §8.6 (pipeline order) and §6.10 (workflow commands) -->
+    <section class="section section--tight" aria-labelledby="pipeline-order">
+      <div class="container">
+        <h2 id="pipeline-order">The full pipeline order</h2>
+        <p>A typical complete run follows this order: <strong>ingest &rarr; chunk &rarr; forge &rarr; link &rarr; export &rarr; validate &rarr; index</strong>.</p>
+        <pre class="code" data-label="bash — typical run"><code>python -m src.cli ingest-youtube --url "https://www.youtube.com/watch?v=VIDEO_ID"
+python -m src.cli chunk --all
+python -m src.cli forge --topic "your-topic" --batch-size 15
+python -m src.cli link --topic "your-topic"
+python -m src.cli export --all
+python -m src.cli validate --all
+python -m src.cli index</code></pre>
+        <div class="callout callout--warning">
+          <span class="callout-icon" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 3.5 18 17H2L10 3.5z"></path>
+              <path d="M10 9v4M10 15.2v.1"></path>
+            </svg>
+          </span>
+          <div>
+            <p class="callout-title">Before your first run</p>
+            <p>If your clone has a fresh database, scope the forge to new content with <code>--topic</code> or explicit URLs to avoid duplicate <code>_v2</code> skills. See the <a href="contributors.html#workflow">cold-start warning</a> and the full <a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/BYOK.md">BYOK guide</a>.</p>
+          </div>
+        </div>
+        <p><a class="btn btn-secondary" href="https://github.com/HanuShashwat/openyc-skills/blob/main/README.md">Project README
+          <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+            <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+          </svg>
+        </a></p>
+      </div>
+    </section>
+
+    <div class="container">
+      <a class="back-to-top" href="#top">Back to top
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+          <path d="M8 13V3m0 0L4.5 6.5M8 3l3.5 3.5"></path>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3.5 5.5 7 2 10.5"></path>
+                <path d="M7.5 10.5H12"></path>
+              </svg>
+            </span>
+            OpenYC Skills
+          </a>
+          <p>Startup advice from Y Combinator's public content, distilled into composable skill files for AI agents.</p>
+        </div>
+        <nav aria-label="Footer — site">
+          <h2 class="footer-heading">Site</h2>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="agents.html">For AI Agents</a></li>
+            <li><a href="contributors.html">For Contributors</a></li>
+            <li><a href="taxonomy.html">Taxonomy</a></li>
+            <li><a href="cli.html">CLI Reference</a></li>
+            <li><a href="about.html">FAQ</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Footer — project">
+          <h2 class="footer-heading">Project</h2>
+          <ul class="footer-links">
+            <li><a href="https://github.com/HanuShashwat/openyc-skills">GitHub repo
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/CONSUMPTION.md">Consumption guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/BYOK.md">BYOK guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="footer-disclaimer">OpenYC Skills is not affiliated with, endorsed by, or built by Y Combinator. It analyzes publicly available YC content.</p>
+      <p class="footer-legal">&copy; 2026 OpenYC Skills &middot; Code: MIT &middot; Generated skills: CC BY-SA 4.0</p>
+    </div>
+  </footer>
+</body>
+</html>

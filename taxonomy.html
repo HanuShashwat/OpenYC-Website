@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Taxonomy — OpenYC Skills</title>
+  <meta name="description" content="The OpenYC Skills taxonomy: 8 categories and 37 subcategories, how skill IDs map to the tree, and why the taxonomy is locked. Source of truth: config/taxonomy.yml.">
+  <link rel="canonical" href="https://hanushashwat.github.io/OpenYC-Website/taxonomy.html">
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="scripts/motion.js" defer></script>
+  <script src="scripts/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3.5 5.5 7 2 10.5"></path>
+            <path d="M7.5 10.5H12"></path>
+          </svg>
+        </span>
+        OpenYC Skills
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>
+        <span class="sr-only">Toggle menu</span>
+        <svg class="icon-menu" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 5.5h14M3 10h14M3 14.5h14"></path>
+        </svg>
+        <svg class="icon-close" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M5 5l10 10M15 5 5 15"></path>
+        </svg>
+      </button>
+      <nav id="site-nav" aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="agents.html">For AI Agents</a></li>
+          <li><a href="contributors.html">For Contributors</a></li>
+          <li><a href="taxonomy.html" aria-current="page">Taxonomy</a></li>
+          <li><a href="cli.html">CLI Reference</a></li>
+          <li><a href="about.html">FAQ</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page-head">
+      <div class="container">
+        <h1 class="page-title">OpenYC Skills Taxonomy</h1>
+        <p class="page-lead">Eight categories, 37 subcategories &mdash; the fixed map of every skill. Categories are locked on purpose, so agents can route reliably.</p>
+      </div>
+    </section>
+
+    <!-- SOURCE: AGENTS.md §6.3 (exact categories/descriptions); subcategories derived
+         from config/taxonomy.yml (37). NOTE: docs/TAXONOMY.md says "38 subcategories";
+         the configuration file contains 37 — the config is authoritative (AGENTS.md Rule 5.1). -->
+    <section class="section section--tight" aria-labelledby="taxonomy-table">
+      <div class="container">
+        <h2 id="taxonomy-table">The full taxonomy</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Category</th>
+                <th scope="col">What it covers</th>
+                <th scope="col">Subcategories</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>fundraising</code></td>
+                <td>Raising capital from investors</td>
+                <td>
+                  <span class="chip">seed-round</span>
+                  <span class="chip">series-a</span>
+                  <span class="chip">pitch-deck</span>
+                  <span class="chip">investor-relations</span>
+                  <span class="chip">valuation</span>
+                  <span class="chip">term-sheets</span>
+                </td>
+              </tr>
+              <tr>
+                <td><code>hiring</code></td>
+                <td>Building the team</td>
+                <td>
+                  <span class="chip">first-hires</span>
+                  <span class="chip">technical-hiring</span>
+                  <span class="chip">culture-fit</span>
+                  <span class="chip">compensation</span>
+                  <span class="chip">firing</span>
+                </td>
+              </tr>
+              <tr>
+                <td><code>product</code></td>
+                <td>Product development &amp; management</td>
+                <td>
+                  <span class="chip">mvp</span>
+                  <span class="chip">product-market-fit</span>
+                  <span class="chip">user-research</span>
+                  <span class="chip">roadmap</span>
+                  <span class="chip">design</span>
+                </td>
+              </tr>
+              <tr>
+                <td><code>growth</code></td>
+                <td>Acquiring and retaining users</td>
+                <td>
+                  <span class="chip">marketing</span>
+                  <span class="chip">sales</span>
+                  <span class="chip">retention</span>
+                  <span class="chip">pricing</span>
+                  <span class="chip">distribution</span>
+                </td>
+              </tr>
+              <tr>
+                <td><code>culture</code></td>
+                <td>Company culture &amp; operations</td>
+                <td>
+                  <span class="chip">mission</span>
+                  <span class="chip">values</span>
+                  <span class="chip">remote-work</span>
+                  <span class="chip">communication</span>
+                </td>
+              </tr>
+              <tr>
+                <td><code>strategy</code></td>
+                <td>High-level company decisions</td>
+                <td>
+                  <span class="chip">pivoting</span>
+                  <span class="chip">competition</span>
+                  <span class="chip">market-sizing</span>
+                  <span class="chip">monetization</span>
+                </td>
+              </tr>
+              <tr>
+                <td><code>founder-mental-models</code></td>
+                <td>Founder psychology &amp; decision-making</td>
+                <td>
+                  <span class="chip">motivation</span>
+                  <span class="chip">burnout</span>
+                  <span class="chip">decision-making</span>
+                  <span class="chip">leadership</span>
+                </td>
+              </tr>
+              <tr>
+                <td><code>technical</code></td>
+                <td>Engineering &amp; infrastructure</td>
+                <td>
+                  <span class="chip">architecture</span>
+                  <span class="chip">scaling</span>
+                  <span class="chip">security</span>
+                  <span class="chip">ai-ml</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCE: docs/TAXONOMY.md "How Skill IDs Map to the Taxonomy" (illustrative IDs) -->
+    <section class="section section--tight" aria-labelledby="how-it-works">
+      <div class="container">
+        <h2 id="how-it-works">How skill IDs map to the taxonomy</h2>
+        <p>Every skill belongs to <strong>exactly one category</strong>, and its ID embeds the category and subcategory:</p>
+        <pre class="code" data-label="skill ID pattern"><code>yc-{category}-{subcategory}-{descriptor}</code></pre>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Skill ID (illustrative)</th>
+                <th scope="col">Category</th>
+                <th scope="col">Subcategory</th>
+                <th scope="col">Descriptor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>yc-fundraising-seed-round-timing</code></td>
+                <td><code>fundraising</code></td>
+                <td><code>seed-round</code></td>
+                <td><code>timing</code></td>
+              </tr>
+              <tr>
+                <td><code>yc-hiring-first-technical-hire</code></td>
+                <td><code>hiring</code></td>
+                <td><code>first-hires</code></td>
+                <td><code>technical-hire</code></td>
+              </tr>
+              <tr>
+                <td><code>yc-product-mvp-no-code-approach</code></td>
+                <td><code>product</code></td>
+                <td><code>mvp</code></td>
+                <td><code>no-code-approach</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-muted">The IDs above are illustrative examples from the project docs &mdash; no skill files are published yet.</p>
+        <p>IDs are lowercase, hyphen-separated, and at most 6 words after <code>yc-{category}</code>. The category in the ID must match the <code>skills/{category}/</code> directory and the file's frontmatter.</p>
+        <h3>Tags cross the boundaries</h3>
+        <p>Categories are exclusive, but <strong>tags are not</strong>. A skill can carry up to 10 lowercase tags from any topic, so a <code>fundraising</code> skill can surface under <code>%hiring</code>. Consumers filter with <code>/category</code> and <code>%tag</code> prefixes; the pre-computed similarity matrix links related skills across categories.</p>
+      </div>
+    </section>
+
+    <!-- SOURCE: docs/TAXONOMY.md "Why the Taxonomy Is Locked" -->
+    <section class="section section--tight" aria-labelledby="locked">
+      <div class="container">
+        <h2 id="locked">Why the taxonomy is locked</h2>
+        <ul>
+          <li><strong>Prevents overlap:</strong> without clear boundaries, "pricing strategy" could land in <code>growth</code>, <code>strategy</code>, or <code>product</code>.</li>
+          <li><strong>Enables reliable routing:</strong> agents using the <code>/category</code> filter depend on a stable, known set of categories.</li>
+          <li><strong>Prevents sprawl:</strong> a fixed set keeps the focus on core startup advice.</li>
+          <li><strong>Maintains quality:</strong> each category should have substantial YC content behind it.</li>
+        </ul>
+        <p>New categories are possible but require a pull request &mdash; they can't be added silently. The single source of truth is <code>config/taxonomy.yml</code> in the repository.</p>
+        <p>
+          <a class="btn btn-secondary" href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/TAXONOMY.md">Taxonomy reference
+            <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+              <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+            </svg>
+          </a>
+          <a class="btn btn-secondary" href="https://github.com/HanuShashwat/openyc-skills/blob/main/config/taxonomy.yml">config/taxonomy.yml
+            <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14">
+              <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+            </svg>
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <div class="container">
+      <a class="back-to-top" href="#top">Back to top
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+          <path d="M8 13V3m0 0L4.5 6.5M8 3l3.5 3.5"></path>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html" aria-label="OpenYC Skills — home">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3.5 5.5 7 2 10.5"></path>
+                <path d="M7.5 10.5H12"></path>
+              </svg>
+            </span>
+            OpenYC Skills
+          </a>
+          <p>Startup advice from Y Combinator's public content, distilled into composable skill files for AI agents.</p>
+        </div>
+        <nav aria-label="Footer — site">
+          <h2 class="footer-heading">Site</h2>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="agents.html">For AI Agents</a></li>
+            <li><a href="contributors.html">For Contributors</a></li>
+            <li><a href="taxonomy.html">Taxonomy</a></li>
+            <li><a href="cli.html">CLI Reference</a></li>
+            <li><a href="about.html">FAQ</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="Footer — project">
+          <h2 class="footer-heading">Project</h2>
+          <ul class="footer-links">
+            <li><a href="https://github.com/HanuShashwat/openyc-skills">GitHub repo
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/CONSUMPTION.md">Consumption guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+            <li><a href="https://github.com/HanuShashwat/openyc-skills/blob/main/docs/BYOK.md">BYOK guide
+              <svg class="external-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="12" height="12">
+                <path d="M5 11 11 5M6.5 5H11v4.5"></path>
+              </svg>
+            </a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="footer-disclaimer">OpenYC Skills is not affiliated with, endorsed by, or built by Y Combinator. It analyzes publicly available YC content.</p>
+      <p class="footer-legal">&copy; 2026 OpenYC Skills &middot; Code: MIT &middot; Generated skills: CC BY-SA 4.0</p>
+    </div>
+  </footer>
+</body>
+</html>

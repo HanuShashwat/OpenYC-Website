@@ -1,0 +1,1486 @@
+/* ==========================================================================
+   OpenYC Skills — website styles
+   Plain CSS3, no build step, no external resources (AGENTS.md §13.1, §13.4).
+   Design tokens map to AGENTS.md §11.4 (palette), §11.3 (type), §11.5 (spacing).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design tokens
+   -------------------------------------------------------------------------- */
+:root {
+  /* Palette (AGENTS.md §11.4.1 — dark, fixed for v1) */
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-muted: #8b949e;
+  --accent: #f78166;          /* YC orange — primary CTA and highlights only */
+  --accent-secondary: #58a6ff; /* links */
+  --success: #3fb950;
+  --warning: #d29922;
+  --code-bg: #010409;
+
+  /* Alpha tints derived from palette colors (callouts, overlays) */
+  --tint-info: rgba(88, 166, 255, 0.08);
+  --tint-warning: rgba(210, 153, 34, 0.1);
+  --tint-success: rgba(63, 185, 80, 0.08);
+  --tint-hover: rgba(230, 237, 243, 0.04);
+
+  /* Typography (AGENTS.md §11.3.1) */
+  --font-sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+
+  /* Type scale (AGENTS.md §11.3.2) */
+  --text-hero: clamp(2.25rem, 5vw, 4rem);
+  --text-h2: clamp(1.5rem, 3vw, 2rem);
+  --text-h3: 1.25rem;
+  --text-body: 1rem;
+  --text-body-lg: 1.125rem;
+  --text-small: 0.8125rem;
+  --text-code: 0.875rem;
+
+  /* Spacing scale — 4px base (AGENTS.md §11.5): 4, 8, 12, 16, 24, 32, 48, 64, 96 */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+
+  /* Radii (AGENTS.md §11.5 — one radius per component type) */
+  --radius-card: 12px;
+  --radius-control: 8px;
+  --radius-chip: 8px;
+  --radius-code: 10px;
+
+  /* Depth (AGENTS.md §11.4.3) */
+  --shadow-card: 0 8px 24px rgba(1, 4, 9, 0.45);
+  --shadow-terminal: 0 16px 48px rgba(1, 4, 9, 0.55);
+
+  /* Motion (AGENTS.md §11.6, §13.6) */
+  --spring-damping: 1;          /* critically damped, no bounce in v1 */
+  --spring-response: 0.4s;
+  --press-duration: 100ms;
+  --fade-duration: 200ms;
+
+  /* Layout (AGENTS.md §11.5) */
+  --content-max: 1100px;
+  --nav-height: 64px;
+  --gutter: clamp(16px, 4vw, 32px);
+}
+
+/* --------------------------------------------------------------------------
+   2. Base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%; /* respect user text-size settings */
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.6; /* body leading (AGENTS.md §11.3.2) */
+  letter-spacing: 0;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body.nav-open {
+  overflow: hidden; /* body scroll lock while the mobile menu is open */
+}
+
+img,
+svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+a {
+  color: var(--accent-secondary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--text-code);
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+::selection {
+  background: rgba(88, 166, 255, 0.32);
+  color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   3. Utilities
+   -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 16px;
+  z-index: 100;
+  padding: 12px 16px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 0 0 8px 8px;
+  transform: translateY(-200%);
+  transition: transform var(--fade-duration) ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  text-decoration: none;
+}
+
+.section {
+  padding: var(--sp-7) 0;
+}
+
+.section--tight {
+  padding: var(--sp-6) 0;
+}
+
+.section-head {
+  max-width: 720px;
+  margin-bottom: var(--sp-6);
+}
+
+.section-kicker {
+  display: block;
+  margin-bottom: var(--sp-2);
+  color: var(--accent);
+  font-size: var(--text-small);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.section-lead {
+  margin: var(--sp-3) 0 0;
+  color: var(--text-muted);
+  font-size: var(--text-body-lg);
+}
+
+/* Page head shared by every interior page (AGENTS.md §12.12) */
+.page-head {
+  padding: var(--sp-8) 0 var(--sp-6);
+}
+
+.page-head .page-title {
+  margin: 0;
+  font-size: var(--text-h2);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+}
+
+.page-lead {
+  max-width: 720px;
+  margin: var(--sp-3) 0 0;
+  color: var(--text-muted);
+  font-size: var(--text-body-lg);
+}
+
+.back-to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 44px;
+  margin-top: var(--sp-7);
+  padding: 12px 0;
+  font-size: var(--text-small);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+  touch-action: manipulation;
+}
+
+.back-to-top:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.external-mark {
+  margin-left: 4px;
+  color: currentColor;
+  opacity: 0.75;
+}
+
+/* --------------------------------------------------------------------------
+   4. Typography
+   -------------------------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text);
+}
+
+h2 {
+  font-size: var(--text-h2);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--sp-3);
+}
+
+h3 {
+  font-size: var(--text-h3);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  margin: var(--sp-6) 0 var(--sp-3);
+}
+
+.section-head h2,
+.page-head .page-title {
+  margin-bottom: 0;
+}
+
+.card-title,
+.step-title,
+.footer-heading {
+  margin-top: 0;
+}
+
+p {
+  margin: 0 0 var(--sp-4);
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   5. Buttons (AGENTS.md §12.2)
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: 44px;
+  padding: 12px 24px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform var(--press-duration) ease-out;
+}
+
+.btn:hover {
+  text-decoration: none;
+}
+
+.btn:active,
+.btn.is-pressed {
+  transform: scale(0.97); /* press feedback on pointer-down (AGENTS.md §11.6.1) */
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #0d1117;
+}
+
+.btn-primary:hover {
+  background: #ff8f73; /* lightened accent for hover — derived from palette accent */
+  color: #0d1117;
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-secondary:hover {
+  color: #ffffff;
+  border-color: var(--text);
+}
+
+.btn-link {
+  min-height: 44px;
+  padding: 12px 0;
+  background: transparent;
+  color: var(--accent-secondary);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: var(--radius-control);
+}
+
+.btn-link:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   6. Header & navigation (AGENTS.md §12.1)
+   -------------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(13, 17, 23, 0.72); /* translucent floating chrome (§11.4.2) */
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* Scroll-edge treatment: soft gradient mask, not a hard divider (§11.4.2) */
+.site-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -12px;
+  height: 12px;
+  background: linear-gradient(to bottom, rgba(13, 17, 23, 0.55), transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+
+.site-header.is-scrolled::after {
+  opacity: 1;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  height: var(--nav-height);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  min-height: 44px;
+}
+
+.brand:hover {
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-chip);
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.brand-mark svg {
+  width: 14px;
+  height: 14px;
+}
+
+.nav-toggle {
+  display: none; /* shown by .js on mobile only */
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform var(--press-duration) ease-out;
+}
+
+.nav-toggle:active,
+.nav-toggle.is-pressed {
+  transform: scale(0.97);
+}
+
+.nav-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.nav-toggle .icon-close {
+  display: none;
+}
+
+.nav-open .nav-toggle .icon-menu {
+  display: none;
+}
+
+.nav-open .nav-toggle .icon-close {
+  display: block;
+}
+
+.nav-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 8px;
+  color: var(--text-muted);
+  font-size: var(--text-small);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.nav-links a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
+}
+
+.nav-links a[aria-current="page"] {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+}
+
+/* Mobile menu panel — anchored to the header, symmetric path (§11.6.4) */
+.js .nav-links {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: block;
+  padding: var(--sp-2) var(--gutter) var(--sp-4);
+  background: rgba(13, 17, 23, 0.94);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
+  transform-origin: top center;
+  opacity: 0;
+  transform: translateY(-8px);
+  visibility: hidden;
+  pointer-events: none;
+  box-shadow: var(--shadow-card);
+}
+
+.js .nav-open .nav-links {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.js .nav-links a {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 8px;
+}
+
+.js .nav-links a[aria-current="page"] {
+  text-decoration-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   7. Hero (AGENTS.md §12.3)
+   -------------------------------------------------------------------------- */
+.hero {
+  padding: var(--sp-8) 0 var(--sp-7);
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-chip);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: var(--text-small);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.hero-eyebrow .eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+.hero h1 {
+  max-width: 18ch;
+  font-size: var(--text-hero);
+  line-height: 1.05; /* tight leading for display type (§11.3.2) */
+  letter-spacing: -0.025em;
+}
+
+.hero-sub {
+  max-width: 56ch;
+  margin: var(--sp-5) 0 0;
+  color: var(--text-muted);
+  font-size: var(--text-body-lg);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3) var(--sp-4);
+  margin-top: var(--sp-6);
+}
+
+.hero-visual {
+  margin-top: var(--sp-7);
+}
+
+/* One subtle hero entrance, played once (§11.6.5). Reduced motion disables it. */
+.hero-in {
+  animation: hero-in 400ms ease-out both;
+}
+
+.hero-in--delay {
+  animation-delay: 120ms;
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8. Terminal mockup & code blocks (AGENTS.md §12.4, §12.7)
+   -------------------------------------------------------------------------- */
+.terminal {
+  overflow: hidden;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-terminal);
+}
+
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.terminal-bar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.terminal-filename {
+  overflow: hidden;
+  margin-left: var(--sp-2);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.terminal-badge {
+  flex: 0 0 auto;
+  padding: 4px 10px;
+  border: 1px solid rgba(210, 153, 34, 0.5);
+  border-radius: var(--radius-chip);
+  background: var(--tint-warning);
+  color: var(--warning);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.terminal-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: 0 0 auto;
+}
+
+.terminal pre {
+  margin: 0;
+  padding: var(--sp-4);
+  overflow-x: auto;
+}
+
+.code-block {
+  position: relative;
+  overflow: hidden;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-code);
+}
+
+/* No-JS fallback: a bare pre.code still renders as a code block */
+pre.code {
+  margin: var(--sp-4) 0;
+  padding: var(--sp-4);
+  overflow-x: auto;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-code);
+  color: var(--text);
+}
+
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3) var(--sp-2) var(--sp-4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.code-label {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: var(--sp-4);
+  overflow-x: auto;
+  color: var(--text);
+  font-size: var(--text-code);
+  line-height: 1.6;
+}
+
+.code-block pre code {
+  font-family: var(--font-mono);
+  white-space: pre;
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-height: 32px;
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-chip);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform var(--press-duration) ease-out, color 150ms ease, border-color 150ms ease;
+}
+
+.copy-btn:active,
+.copy-btn.is-pressed {
+  transform: scale(0.97);
+}
+
+.copy-btn:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.copy-btn.is-copied {
+  color: var(--success);
+  border-color: rgba(63, 185, 80, 0.55);
+}
+
+.copy-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+@media (hover: none) {
+  .copy-btn {
+    min-height: 44px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   9. Cards & grids (AGENTS.md §12.5, §12.6)
+   -------------------------------------------------------------------------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.card--pad {
+  padding: var(--sp-5);
+}
+
+.card--lift {
+  transition: box-shadow 150ms ease;
+}
+
+.card--lift:hover {
+  box-shadow: var(--shadow-card);
+}
+
+.card-link {
+  display: flex;
+  flex-direction: column;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.card-link:hover {
+  text-decoration: none;
+}
+
+.card-link:active,
+.card-link.is-pressed {
+  transform: scale(0.97); /* press scale for interactive cards */
+}
+
+.card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--sp-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--bg);
+  color: var(--accent-secondary);
+}
+
+.card-icon--accent {
+  color: var(--accent);
+}
+
+.card-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.card-title {
+  margin-bottom: var(--sp-2);
+}
+
+.card-text {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  color: var(--accent-secondary);
+  font-size: var(--text-small);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.card-cta svg {
+  width: 14px;
+  height: 14px;
+}
+
+.grid {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.grid--promises,
+.grid--audience {
+  grid-template-columns: 1fr;
+}
+
+.grid--categories {
+  grid-template-columns: 1fr;
+}
+
+.category-card .card-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-code);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.category-card .card-cta {
+  margin-top: auto;
+  padding-top: var(--sp-4);
+}
+
+.category-card .card-text {
+  margin-bottom: var(--sp-4);
+}
+
+/* --------------------------------------------------------------------------
+   10. Callouts (AGENTS.md §12.8)
+   -------------------------------------------------------------------------- */
+.callout {
+  display: flex;
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0;
+  padding: var(--sp-4);
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: var(--radius-code);
+  background: var(--surface);
+}
+
+.callout-icon {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--accent-secondary);
+}
+
+.callout-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.callout-title {
+  margin-bottom: var(--sp-2);
+  font-weight: 700;
+}
+
+.callout p {
+  margin-bottom: var(--sp-2);
+}
+
+.callout p:last-child {
+  margin-bottom: 0;
+}
+
+.callout code {
+  font-size: 0.8125rem;
+}
+
+.callout--warning {
+  border-color: rgba(210, 153, 34, 0.45);
+  border-left-color: var(--warning);
+  background: var(--tint-warning);
+}
+
+.callout--warning .callout-icon {
+  color: var(--warning);
+}
+
+.callout--info {
+  border-color: rgba(88, 166, 255, 0.4);
+  border-left-color: var(--accent-secondary);
+  background: var(--tint-info);
+}
+
+.callout--info .callout-icon {
+  color: var(--accent-secondary);
+}
+
+.callout--success {
+  border-color: rgba(63, 185, 80, 0.4);
+  border-left-color: var(--success);
+  background: var(--tint-success);
+}
+
+.callout--success .callout-icon {
+  color: var(--success);
+}
+
+/* --------------------------------------------------------------------------
+   11. Tables & chips (AGENTS.md §12.9, §12.6)
+   -------------------------------------------------------------------------- */
+.table-wrap {
+  overflow-x: auto;
+  margin: var(--sp-4) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-code);
+  background: var(--surface);
+}
+
+.table-wrap.has-overflow {
+  -webkit-mask-image: linear-gradient(to right, black 0, black calc(100% - 16px), transparent 100%);
+  mask-image: linear-gradient(to right, black 0, black calc(100% - 16px), transparent 100%);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+th,
+td {
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: var(--text-muted);
+  font-size: var(--text-small);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+td {
+  border-bottom: 1px solid rgba(48, 54, 61, 0.6);
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+tbody tr:hover {
+  background: var(--tint-hover); /* subtle hover row highlight, no motion */
+}
+
+td code,
+th code {
+  font-size: 0.8125rem;
+}
+
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.chip {
+  display: inline-block;
+  margin: 0 8px 8px 0;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-chip);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   12. Steps ("How it works", AGENTS.md §8.2)
+   -------------------------------------------------------------------------- */
+.steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.step {
+  position: relative;
+  padding-top: var(--sp-2);
+}
+
+.step::before {
+  counter-increment: step;
+  content: "0" counter(step);
+  display: block;
+  margin-bottom: var(--sp-3);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-code);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.step:nth-of-type(n + 10)::before {
+  content: counter(step);
+}
+
+.step-title {
+  margin-bottom: var(--sp-2);
+}
+
+.step-text {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.flow-list {
+  margin: var(--sp-4) 0;
+  padding-left: var(--sp-5);
+}
+
+.flow-list li {
+  margin-bottom: var(--sp-2);
+  padding-left: var(--sp-2);
+}
+
+.flow-list code {
+  font-size: 0.8125rem;
+}
+
+/* --------------------------------------------------------------------------
+   13. FAQ (AGENTS.md §12.10)
+   -------------------------------------------------------------------------- */
+.faq {
+  max-width: 760px;
+}
+
+.faq-item {
+  margin-bottom: var(--sp-3);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-code);
+}
+
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  min-height: 44px;
+  padding: var(--sp-4);
+  list-style: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  font-weight: 600;
+  transition: transform var(--press-duration) ease-out;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary:active,
+.faq-item summary.is-pressed {
+  transform: scale(0.99);
+}
+
+.summary-chevron {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+  transition: transform 200ms ease;
+}
+
+.summary-chevron svg {
+  width: 16px;
+  height: 16px;
+}
+
+.faq-item[open] .summary-chevron {
+  transform: rotate(180deg);
+}
+
+/* Height animation via the grid-rows technique (AGENTS.md §11.6.2) */
+.faq-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.faq-item[open] .faq-body {
+  grid-template-rows: 1fr;
+}
+
+.faq-item.is-closing .faq-body {
+  grid-template-rows: 0fr;
+}
+
+.faq-inner {
+  overflow: hidden;
+}
+
+.faq-inner > * {
+  padding: 0 var(--sp-4) var(--sp-4);
+}
+
+.faq-inner p:first-child {
+  margin-top: var(--sp-2);
+}
+
+/* FAQ teaser list on the home page (§8.2) */
+.faq-teaser {
+  max-width: 760px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faq-teaser li {
+  margin-bottom: var(--sp-3);
+}
+
+.faq-teaser a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  min-height: 44px;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-code);
+  color: var(--text);
+  font-weight: 600;
+  touch-action: manipulation;
+  transition: transform var(--press-duration) ease-out;
+}
+
+.faq-teaser a:hover {
+  text-decoration: none;
+  border-color: var(--text-muted);
+}
+
+.faq-teaser a:active,
+.faq-teaser a.is-pressed {
+  transform: scale(0.99);
+}
+
+.faq-teaser a em {
+  font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   14. Footer (AGENTS.md §12.11)
+   -------------------------------------------------------------------------- */
+.site-footer {
+  margin-top: var(--sp-9);
+  padding: var(--sp-7) 0 var(--sp-6);
+  border-top: 1px solid var(--border);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-6);
+}
+
+.footer-brand p {
+  margin: var(--sp-3) 0 0;
+  max-width: 40ch;
+  color: var(--text-muted);
+  font-size: var(--text-small);
+}
+
+.footer-heading {
+  margin-bottom: var(--sp-3);
+  font-size: var(--text-small);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.footer-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: var(--sp-2);
+}
+
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text-muted);
+  font-size: var(--text-small);
+}
+
+.footer-links a:hover {
+  color: var(--text);
+}
+
+.footer-disclaimer {
+  margin-top: var(--sp-6);
+  padding-top: var(--sp-4);
+  border-top: 1px solid rgba(48, 54, 61, 0.6);
+  color: var(--text-muted);
+  font-size: var(--text-small);
+}
+
+.footer-legal {
+  margin: var(--sp-3) 0 0;
+  color: var(--text-muted);
+  font-size: var(--text-small);
+}
+
+/* --------------------------------------------------------------------------
+   15. Focus & misc
+   -------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--accent-secondary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.code-block pre::-webkit-scrollbar,
+.table-wrap::-webkit-scrollbar,
+.terminal pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block pre::-webkit-scrollbar-thumb,
+.table-wrap::-webkit-scrollbar-thumb,
+.terminal pre::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.code-block pre::-webkit-scrollbar-track,
+.table-wrap::-webkit-scrollbar-track,
+.terminal pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   16. Motion & accessibility media queries (AGENTS.md §11.7)
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-in {
+    animation: none;
+  }
+
+  .js .nav-links {
+    transition: opacity var(--fade-duration) ease;
+  }
+
+  .faq-body {
+    transition: none;
+  }
+
+  .faq-item[open] .faq-body,
+  .faq-item.is-closing .faq-body {
+    grid-template-rows: 1fr;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header,
+  .js .nav-links {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .site-header::after {
+    background: linear-gradient(to bottom, rgba(13, 17, 23, 0.85), transparent);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .card,
+  .code-block,
+  .terminal,
+  .table-wrap,
+  .callout,
+  .faq-item,
+  .site-header,
+  .js .nav-links {
+    border-color: var(--text-muted);
+  }
+
+  .site-header {
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .chip {
+    border-color: var(--text-muted);
+    color: var(--text);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   17. Responsive (AGENTS.md §11.8 — mobile-first, 720/1024 breakpoints)
+   -------------------------------------------------------------------------- */
+@media (min-width: 720px) {
+  .grid--promises,
+  .grid--categories,
+  .grid--audience {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-grid {
+    grid-template-columns: 1.4fr 1fr 1fr;
+  }
+
+  .section {
+    padding: var(--sp-8) 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding: var(--sp-9) 0 var(--sp-8);
+  }
+
+  .hero .container {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    gap: var(--sp-8);
+  }
+
+  .hero-visual {
+    margin-top: 0;
+  }
+
+  .grid--promises {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid--categories {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .grid--audience {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .steps {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Desktop: horizontal nav, no toggle, no panel */
+  .nav-toggle {
+    display: none !important;
+  }
+
+  .js .nav-links,
+  .nav-links {
+    position: static;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    padding: 0;
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-radius: 0;
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+    pointer-events: auto;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .js .nav-toggle {
+    display: inline-flex;
+  }
+}
